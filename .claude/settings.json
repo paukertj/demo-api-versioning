@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(cat *appsettings*.json*)",
+      "Bash(tee *appsettings*.json*)",
+      "Bash(grep *appsettings*.json*)",
+      "Bash(head *appsettings*.json*)",
+      "Bash(tail *appsettings*.json*)",
+      "Bash(less *appsettings*.json*)",
+      "Bash(more *appsettings*.json*)",
+      "Bash(awk *appsettings*.json*)",
+      "Bash(sed *appsettings*.json*)",
+      "Bash(cp *appsettings*.json*)",
+      "Bash(mv *appsettings*.json*)",
+      "Bash(rm *appsettings*.json*)",
+      "Read(**/appsettings*.json)",
+      "Write(**/appsettings*.json)",
+      "Edit(**/appsettings*.json)"
+    ]
+  }
+}
