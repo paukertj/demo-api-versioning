@@ -1,6 +1,10 @@
 namespace Api.Abstractions.Dtos;
 
-public sealed record SettingsDto
+public sealed record SettingsDto<T>
 {
-    public IReadOnlyList<SettingsItemDto> Items { get; set; } = Array.Empty<SettingsItemDto>();
+    public T? Value { get; set; }
+
+    public required string Key { get; set; } = null!;
+
+    public required int ValueVersion { get; set; }
 }

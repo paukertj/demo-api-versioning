@@ -1,4 +1,3 @@
-using Core.Abstractions.Domains;
 using Infrastructure.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,50 +12,39 @@ internal sealed class SettingsRepository : ISettingsRepository
         _databaseContext = databaseContext;
     }
     
-    public async Task<SettingsDomain> GetSettingsAsync(string key, int valueVersion, int schemaVersion, CancellationToken cancellationToken)
+    public async Task<string?> GetSettingsAsync(string key, int valueVersion, int schemaVersion, CancellationToken cancellationToken)
     {
-        var items = await _databaseContext.Settings
+        return await _databaseContext.Settings
             .AsNoTracking()
             .Where(settings => settings.Key == key &&
                                settings.ValueVersion == valueVersion &&
                                settings.SchemaVersion == schemaVersion)
-            .Select(settings => new SettingsItemDomain
-            {
-                Key = settings.Key,
-                Value = settings.Value,
-                SchemaVersion = settings.SchemaVersion,
-                ValueVersion = settings.ValueVersion,
-            })
-            .ToListAsync(cancellationToken);
-
-        return new SettingsDomain
-        {
-            Items = items
-        };
+            .Select(settings => settings.Value)
+            .FirstOrDefaultAsync(cancellationToken);
     }
-
-    public async Task ManageSettingsAsync(SettingsItemDomain settingsDomain, CancellationToken cancellationToken)
+    
+    public async Task ManageSettingsAsync(string value, string key, int schemaVersion, int valueVersion, CancellationToken cancellationToken)
     {
         var entity = await _databaseContext.Settings
             .FirstOrDefaultAsync(
-                settings => settings.Key == settingsDomain.Key &&
-                            settings.ValueVersion == settingsDomain.ValueVersion &&
-                            settings.SchemaVersion == settingsDomain.SchemaVersion,
+                settings => settings.Key == key &&
+                            settings.ValueVersion == valueVersion &&
+                            settings.SchemaVersion == schemaVersion,
                 cancellationToken);
 
         if (entity is null)
         {
             entity = new SettingsEntity
             {
-                Key = settingsDomain.Key,
-                ValueVersion = settingsDomain.ValueVersion,
-                SchemaVersion = settingsDomain.SchemaVersion,
+                Key = key,
+                ValueVersion = valueVersion,
+                SchemaVersion = schemaVersion,
             };
 
             _databaseContext.Settings.Add(entity);
         }
 
-        entity.Value = settingsDomain.Value;
+        entity.Value = value;
 
         await _databaseContext.SaveChangesAsync(cancellationToken);
     }
