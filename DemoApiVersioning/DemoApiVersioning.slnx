@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="Api.Abstractions/Api.Abstractions.csproj" />
+  <Project Path="Api.Client/Api.Client.csproj" />
+  <Project Path="Api/Api.csproj" />
+  <Project Path="Core.Abstractions\Core.Abstractions.csproj" />
+  <Project Path="Core/Core.csproj" />
+  <Project Path="Infrastructure.Database/Infrastructure.Database.csproj" />
+  <Project Path="Tests/Tests.csproj" />
+</Solution>
