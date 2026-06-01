@@ -1,32 +1,46 @@
 using Api.Abstractions.Dtos;
+using Api.Abstractions.V1;
 using Core.Abstractions.Domains;
+using Core.Abstractions.Domains.V1;
 using Majipro.Converter;
 
 namespace Api.Converters;
 
-internal sealed class SettingsItemDomainToSettingsItemDto : IConverter<SettingsItemDomain, SettingsItemDto>
+internal sealed class SettingsItemDomainToSettingsItemDto : IConverter<SettingsDomain<SettingsValueV1Domain>, SettingsDto<SettingsValueV1Dto>>
 {
-    public SettingsItemDto Convert(SettingsItemDomain from)
+    private readonly IConvertingService _convertingService;
+
+    public SettingsItemDomainToSettingsItemDto(IConvertingService convertingService)
     {
-        return new SettingsItemDto
+        _convertingService = convertingService;
+    }
+
+    public SettingsDto<SettingsValueV1Dto> Convert(SettingsDomain<SettingsValueV1Domain> from)
+    {
+        return new SettingsDto<SettingsValueV1Dto>
         {
-            Value = from.Value,
+            Value = _convertingService.Convert<SettingsValueV1Domain?, SettingsValueV1Dto?>(from.Value),
             Key = from.Key,
-            SchemaVersion = from.SchemaVersion,
             ValueVersion = from.ValueVersion
         };
     }
 }
 
-internal sealed class SettingsItemDtoToSettingsItemDomain : IConverter<SettingsItemDto, SettingsItemDomain>
+internal sealed class SettingsItemDtoToSettingsItemDomain : IConverter<SettingsDto<SettingsValueV1Dto>, SettingsDomain<SettingsValueV1Domain>>
 {
-    public SettingsItemDomain Convert(SettingsItemDto from)
+    private readonly IConvertingService _convertingService;
+
+    public SettingsItemDtoToSettingsItemDomain(IConvertingService convertingService)
     {
-        return new SettingsItemDomain
+        _convertingService = convertingService;
+    }
+
+    public SettingsDomain<SettingsValueV1Domain> Convert(SettingsDto<SettingsValueV1Dto> from)
+    {
+        return new SettingsDomain<SettingsValueV1Domain>
         {
-            Value = from.Value,
+            Value = _convertingService.Convert<SettingsValueV1Dto?, SettingsValueV1Domain?>(from.Value),
             Key = from.Key,
-            SchemaVersion = from.SchemaVersion,
             ValueVersion = from.ValueVersion
         };
     }

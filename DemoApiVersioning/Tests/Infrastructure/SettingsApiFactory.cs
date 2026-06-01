@@ -1,5 +1,5 @@
 using Api;
-using Api.Abstractions;
+using Api.Abstractions.V1;
 using Api.Client;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -25,7 +25,7 @@ public sealed class SettingsApiFactory : WebApplicationFactory<Program>
         {
             services.AddClient(c => c.BaseAddress = new Uri("http://localhost"));
 
-            services.AddHttpClient<ISettingsContract, SettingsClientService>()
+            services.AddHttpClient<ISettingsContractV1, SettingsClientServiceV1>()
                 .ConfigurePrimaryHttpMessageHandler(() => Server.CreateHandler());
         });
     }
