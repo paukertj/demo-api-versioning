@@ -46,7 +46,7 @@ internal sealed class SettingsService : ISettingsService
         
         string payload = JsonSerializer.Serialize(settingsDomain.Value);
 
-        await _settingsRepository.ManageSettingsAsync(payload, settingsDomain.Key, settingsDomain.ValueVersion, schemaVersion, cancellationToken);
+        await _settingsRepository.ManageSettingsAsync(payload, settingsDomain.Key, schemaVersion, settingsDomain.ValueVersion, cancellationToken);
     }
 
     public async Task DeleteSettingsAsync(string key, int valueVersion, int schemaVersion, CancellationToken cancellationToken)
